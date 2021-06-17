@@ -1,3 +1,4 @@
-# SQL-project_-Cancer
+# SQL-project_-Cancer THIS IS STILL IN PROGRESS
+
 I first created temp table by joining two table which shows Country, Year, incidence of cancer, total population, incident percentage(incident/total pop)<br />
 Second, I joined the temp table with a table contains median age od the country. <br />
