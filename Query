@@ -1,0 +1,47 @@
+--Joining two table.
+select * from ['cancer-incidence$']
+left join ['world-population-by-world-regio$']
+on ['world-population-by-world-regio$'].Entity= ['cancer-incidence$'].Entity and ['world-population-by-world-regio$'].Year=['cancer-incidence$'].Year
+
+
+--In the United States, what percentage of population gets diagnosed with cancer each year?
+--This shows a slight decrease in a percentage of cancer diagnosis since 1990. 
+
+select ['cancer-incidence$'].Entity, ['cancer-incidence$'].Year,['cancer-incidence$'].[Incidence - Neoplasms - Sex: Both - Age: Age-standardized (Rate)], 
+['world-population-by-world-regio$'].[Total population (Gapminder, HYDE & UN)],
+(['cancer-incidence$'].[Incidence - Neoplasms - Sex: Both - Age: Age-standardized (Rate)]/['world-population-by-world-regio$'].[Total population (Gapminder, HYDE & UN)])*100 as 'Incident per population(%) '
+into cancer_data
+from ['cancer-incidence$']
+left join ['world-population-by-world-regio$']
+on ['world-population-by-world-regio$'].Entity= ['cancer-incidence$'].Entity and ['world-population-by-world-regio$'].Year=['cancer-incidence$'].Year
+where ['cancer-incidence$'].Entity='United States'
+
+--now compare cancer rate to a median age of the populatio to see if there is any tendency of meidan age and cancer rate
+--note median goes by 5 years. 
+select cancer_data.Entity,cancer_data.Year,[cancer_data].[Incident per population(%) ], ['median-age$'].[UN Population Division (Median Age) (2017)] from cancer_data
+left join ['median-age$']
+on cancer_data.Year=['median-age$'].Year and cancer_data.Entity=['median-age$'].Entity
+where cancer_data.Entity='United States' and ['median-age$'].[UN Population Division (Median Age) (2017)] is not null
+--as the median goes up, incident goes down, indication of improment in medicine? 
+
+----look into world wide. 
+--make a temp table with all the countries. 
+select ['cancer-incidence$'].Entity, ['cancer-incidence$'].Year,['cancer-incidence$'].[Incidence - Neoplasms - Sex: Both - Age: Age-standardized (Rate)], 
+['world-population-by-world-regio$'].[Total population (Gapminder, HYDE & UN)],
+(['cancer-incidence$'].[Incidence - Neoplasms - Sex: Both - Age: Age-standardized (Rate)]/['world-population-by-world-regio$'].[Total population (Gapminder, HYDE & UN)])*100 as 'Incident per population(%) '
+into cancer_data_world
+from ['cancer-incidence$']
+left join ['world-population-by-world-regio$']
+on ['world-population-by-world-regio$'].Entity= ['cancer-incidence$'].Entity and ['world-population-by-world-regio$'].Year=['cancer-incidence$'].Year
+
+--with this query, we can look into any countries, for example, Japan
+select cancer_data_world.Entity,cancer_data_world.Year,[cancer_data_world].[Incident per population(%) ], ['median-age$'].[UN Population Division (Median Age) (2017)] from cancer_data_world
+left join ['median-age$']
+on cancer_data_world.Year=['median-age$'].Year and cancer_data_world.Entity=['median-age$'].Entity
+where cancer_data_world.Entity='Japan' and ['median-age$'].[UN Population Division (Median Age) (2017)] is not null
+
+--show all the data
+select cancer_data_world.Entity,cancer_data_world.Year,[cancer_data_world].[Incident per population(%) ], ['median-age$'].[UN Population Division (Median Age) (2017)] from cancer_data_world
+left join ['median-age$']
+on cancer_data_world.Year=['median-age$'].Year and cancer_data_world.Entity=['median-age$'].Entity
+where  ['median-age$'].[UN Population Division (Median Age) (2017)] is not null
