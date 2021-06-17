@@ -22,7 +22,7 @@ select cancer_data.Entity,cancer_data.Year,[cancer_data].[Incident per populatio
 left join ['median-age$']
 on cancer_data.Year=['median-age$'].Year and cancer_data.Entity=['median-age$'].Entity
 where cancer_data.Entity='United States' and ['median-age$'].[UN Population Division (Median Age) (2017)] is not null
---as the median goes up, incident goes down, indication of improment in medicine? 
+--as the median goes up, incident goes down, indication of improvement in medicine? 
 
 ----look into world wide. 
 --make a temp table with all the countries. 
